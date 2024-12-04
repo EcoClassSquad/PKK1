@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Laporan Kebersihan</title>
+</head>
+<body>
+    <h2>Laporan Kebersihan Kelas</h2>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nama Penjaga</th>
+                <th>Kelas</th>
+                <th>Tanggal</th>
+                <th>Kondisi</th>
+                <th>Catatan</th>
+            </tr>
+        </thead>
+        <tbody id="laporanTabel">
+            <!-- Data laporan akan ditampilkan di sini -->
+        </tbody>
+    </table>
+
+    <script>
+        // Fungsi untuk mengambil data dari MySQL dan menampilkannya
+        function ambilLaporan() {
+            fetch('ambil_laporan.php')
+                .then(response => response.json())
+                .then(data => {
+                    const tbody = document.getElementById('laporanTabel');
+                    tbody.innerHTML = ''; // Menghapus data lama
+
+                    data.forEach(laporan => {
+                        const row = `<tr>
+                            <td>${laporan.id}</td>
+                            <td>${laporan.nama_penjaga}</td>
+                            <td>${laporan.kelas}</td>
+                            <td>${laporan.tanggal}</td>
+                            <td>${laporan.kondisi}</td>
+                            <td>${laporan.catatan}</td>
+                        </tr>`;
+                        tbody.innerHTML += row;
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Panggil fungsi untuk menampilkan laporan saat halaman dimuat
+        window.onload = ambilLaporan;
+    </script>
+</body>
+</html>

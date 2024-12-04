@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Kebersihan Kelas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #2196F3;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+        }
+        main {
+            padding: 20px;
+        }
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #1e88e5;
+        }
+        .hidden {
+            display: none;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+        th {
+            background-color: #2196F3;
+            color: white;
+        }
+        img {
+            width: 100px;
+            height: auto;
+        }
+        .logout-btn {
+            background-color: #f44336;
+            margin-top: 10px;
+        }
+        .logout-btn:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Laporan Kebersihan Kelas</h1>
+    </header>
+    <main>
+        <!-- Halaman Login -->
+        <div id="loginPage">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <label for="loginEmail">Email</label>
+                <input type="email" id="loginEmail" placeholder="Masukkan email" required>
+                
+                <label for="loginPassword">Password</label>
+                <input type="password" id="loginPassword" placeholder="Masukkan password" required>
+                
+                <button type="button" onclick="login()">Login</button>
+            </form>
+            <p>Belum punya akun? <a href="#" onclick="showRegisterPage()">Daftar di sini</a>.</p>
+        </div>
+
+        <!-- Halaman Registrasi -->
+        <div id="registerPage" class="hidden">
+            <h2>Registrasi</h2>
+            <form id="registerForm">
+                <label for="registerName">Nama</label>
+                <input type="text" id="registerName" placeholder="Masukkan nama" required>
+                
+                <label for="registerEmail">Email</label>
+                <input type="email" id="registerEmail" placeholder="Masukkan email" required>
+                
+                <label for="registerPassword">Password</label>
+                <input type="password" id="registerPassword" placeholder="Masukkan password" required>
+                
+                <button type="button" onclick="register()">Daftar</button>
+            </form>
+            <p>Sudah punya akun? <a href="#" onclick="showLoginPage()">Login di sini</a>.</p>
+        </div>
+
+        <!-- Halaman Laporan -->
+        <div id="laporanPage" class="hidden">
+            <h2>Form Laporan Kebersihan</h2>
+            <form id="laporanForm">
+                <label for="namaPenjaga">Nama Penanggung Jawab</label>
+                <input type="text" id="namaPenjaga" placeholder="Masukkan nama" required>
+                
+                <label for="kelas">Kelas</label>
+                <input type="text" id="kelas" placeholder="Masukkan nama kelas" required>
+                
+                <label for="tanggal">Tanggal</label>
+                <input type="date" id="tanggal" required>
+                
+                <label for="kondisi">Kondisi Kebersihan</label>
+                <select id="kondisi" required>
+                    <option value="">-- Pilih Kondisi --</option>
+                    <option value="Sangat Bersih">Sangat Bersih</option>
+                    <option value="Bersih">Bersih</option>
+                    <option value="Kurang Bersih">Kurang Bersih</option>
+                    <option value="Kotor">Kotor</option>
+                </select>
+                
+                <label for="catatan">Catatan Tambahan</label>
+                <textarea id="catatan" rows="3" placeholder="Masukkan catatan tambahan (opsional)"></textarea>
+
+                <label for="foto">Foto Dokumentasi</label>
+                <input type="file" id="foto" accept="image/*" required>
+                
+                <button type="button" onclick="tambahLaporan()">Tambah Laporan</button>
+            </form>
+
+            <h2>Daftar Laporan Kebersihan</h2>
+            <table id="tabelLaporan">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Penanggung Jawab</th>
+                        <th>Kelas</th>
+                        <th>Tanggal</th>
+                        <th>Kondisi</th>
+                        <th>Catatan</th>
+                        <th>Foto</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data laporan akan ditampilkan di sini -->
+                </tbody>
+            </table>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </main>
+
+    <script>
+        function submitLaporan() {
+            const namaPenjaga = document.getElementById('namaPenjaga').value;
+            const kelas = document.getElementById('kelas').value;
+            const tanggal = document.getElementById('tanggal').value;
+            const kondisi = document.getElementById('kondisi').value;
+            const catatan = document.getElementById('catatan').value;
+
+            const formData = new FormData();
+            formData.append('nama_penjaga', namaPenjaga);
+            formData.append('kelas', kelas);
+            formData.append('tanggal', tanggal);
+            formData.append('kondisi', kondisi);
+            formData.append('catatan', catatan);
+
+            // Mengirim data ke PHP menggunakan AJAX
+            fetch('tambah_laporan.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+                document.getElementById('laporanForm').reset();  // Reset form setelah data terkirim
+            })
+            .catch(error => console.error('Error:', error));
+        }
+        
+        let users = [];
+        let laporanList = [];
+
+        // Navigasi halaman
+        function showLoginPage() {
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.getElementById('registerPage').classList.add('hidden');
+            document.getElementById('laporanPage').classList.add('hidden');
+        }
+
+        function showRegisterPage() {
+            document.getElementById('registerPage').classList.remove('hidden');
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('laporanPage').classList.add('hidden');
+        }
+
+        function showLaporanPage() {
+            document.getElementById('laporanPage').classList.remove('hidden');
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('registerPage').classList.add('hidden');
+        }
+
+        // Registrasi
+        function register() {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+
+            users.push({ name, email, password });
+            alert('Registrasi berhasil! Silakan login.');
+            showLoginPage();
+        }
+
+        // Login
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            const user = users.find(u => u.email === email && u.password === password);
+            if (user) {
+                alert(`Selamat datang, ${user.name}!`);
+                showLaporanPage();
+            } else {
+                alert('Email atau password salah.');
+            }
+        }
+
+        // Logout
+        function logout() {
+            alert('Anda telah logout.');
+            showLoginPage();
+        }
+
+        // Tambah Laporan
+        function tambahLaporan() {
+            const namaPenjaga = document.getElementById('namaPenjaga').value;
+            const kelas = document.getElementById('kelas').value;
+            const tanggal = document.getElementById('tanggal').value;
+            const kondisi = document.getElementById('kondisi').value;
+            const catatan = document.getElementById('catatan').value;
+            const fotoInput = document.getElementById('foto');
+            const fotoFile = fotoInput.files[0];
+
+            if (namaPenjaga && kelas && tanggal && kondisi && fotoFile) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const fotoURL = event.target.result;
+
+                    laporanList.push({ namaPenjaga, kelas, tanggal, kondisi, catatan, fotoURL });
+
+                    updateTabel();
+                    document.getElementById('laporanForm').reset();
+                };
+                reader.readAsDataURL(fotoFile);
+            } else {
+                alert('Harap lengkapi semua field yang wajib diisi!');
+            }
+        }
+
+        // Update Tabel
+        function updateTabel() {
+            const tbody = document.getElementById('tabelLaporan').querySelector('tbody');
+            tbody.innerHTML = '';
+            laporanList.forEach((laporan, index) => {
+                const row = `<tr>
+                    <td>${index + 1}</td>
+                    <td>${laporan.namaPenjaga}</td>
+                    <td>${laporan.kelas}</td>
+                    <td>${laporan.tanggal}</td>
+                    <td>${laporan.kondisi}</td>
+                    <td>${laporan.catatan || '-'}</td>
+                    <td><img src="${laporan.fotoURL}" alt="Foto Dokumentasi"></td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+        }
+
+    </script>
+</body>
+</html>
